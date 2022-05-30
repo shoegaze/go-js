@@ -8,9 +8,8 @@ import { assert } from 'node:console'
 
 type StaticFilesMap = Map<string, StaticFilesMap | Buffer>
 
+TODO('Detect circular dependencies', 'recursiveLoad', false)
 function recursiveLoad(parent: StaticFilesMap, entries: fs.Dirent[], pathTraversed: string) {
-  TODO('Detect circular dependencies', 'recursiveLoad', false)
-
   entries.forEach(entry => {
     if (entry.isFile()) {
       const filePath = path.join(pathTraversed, entry.name)
