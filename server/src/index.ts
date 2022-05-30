@@ -4,31 +4,30 @@ import fs from "node:fs"
 import path from "node:path"
 
 import TODO from "./todo"
-import { log, logError, logWarn } from "./log"
+import { log, logError, logImportant, logWarn } from "./log"
 import { loadStaticFiles, queryStaticFile } from "./static"
 
 const port = process.env.PORT || 5550
 const rootUrl = `http://localhost:${port}`
 
-log(0, "Caching static files...")
+logImportant(0, "Caching static files...")
 const staticRoot = './static'
 const staticCache = loadStaticFiles(staticRoot)
+
 log(1, "Static files:", staticCache)
 
-const cssRoot = path.join(staticRoot, 'css')
 const htmlIndex = <Buffer>queryStaticFile(staticCache, 'index.html')
-const cssIndex = <Buffer>queryStaticFile(staticCache, path.join(cssRoot, 'index.css'))
 
-log(0, `Attempting to start server at ${rootUrl} ...`)
+logImportant(0, `Attempting to start server at ${rootUrl} ...`)
 const server = http.createServer((req, res) => {
   const url = req.url
 
-  log(0, `Request received at ${url}`)
+  log(0, `req: ${url}`)
 
   if (url) {
     // index page
     if (url.match(/^\/$/)) {
-      log(1, "Serving index page")
+      log(1, "res: index")
 
       res.writeHead(200, { "Content-Type": "text/html" })
       res.end(htmlIndex)
@@ -38,7 +37,7 @@ const server = http.createServer((req, res) => {
       const filePathRel = url.split("/").slice(2)
       const fileName = filePathRel[filePathRel.length - 1]
 
-      log(1, `Requested static file ${fileName} with static path ${filePathRel.join('/')}`)
+      log(1, `req: static file ${fileName} with static path ${filePathRel.join('/')}`)
       const content = queryStaticFile(staticCache, ...filePathRel)
 
       if (content) {
@@ -67,6 +66,7 @@ const server = http.createServer((req, res) => {
           }
         }
 
+        log(1, 'res: static file:', filePathFull)
         res.end(content)
       }
       else {
@@ -88,4 +88,4 @@ const server = http.createServer((req, res) => {
 
 server.listen(port)
 
-log(0, `Server started at ${rootUrl}`)
+logImportant(0, `Server started at ${rootUrl}`)
