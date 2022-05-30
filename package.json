@@ -1,0 +1,26 @@
+{
+  "name": "go",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "run": "npm run build && node server/dist/index.js",
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "immutable": "^4.0.0",
+    "ramda": "^0.28.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.36",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.2"
+  }
+}
